@@ -522,15 +522,16 @@ import org.mockito.verification.VerificationWithTimeout;
  * any clean & simple code. However, if you do have a need to stub with the generic Answer interface, here is an example:
  *
  * <pre class="code"><code class="java">
- * when(mock.someMethod(anyString())).thenAnswer(new Answer() {
- *     Object answer(InvocationOnMock invocation) {
- *         Object[] args = invocation.getArguments();
- *         Object mock = invocation.getMock();
- *         return "called with arguments: " + args;
- *     }
+ * when(mock.someMethod(anyString())).thenAnswer(
+ *     new Answer() {
+ *         public Object answer(InvocationOnMock invocation) {
+ *             Object[] args = invocation.getArguments();
+ *             Object mock = invocation.getMock();
+ *             return "called with arguments: " + Arrays.toString(args);
+ *         }
  * });
  *
- * //the following prints "called with arguments: foo"
+ * //Following prints "called with arguments: [foo]"
  * System.out.println(mock.someMethod("foo"));
  * </code></pre>
  *
@@ -2579,11 +2580,11 @@ public class Mockito extends ArgumentMatchers {
      * Ignoring stubs can be used with <b>verification in order</b>:
      * <pre class="code"><code class="java">
      *  List list = mock(List.class);
-     *  when(mock.get(0)).thenReturn("foo");
+     *  when(list.get(0)).thenReturn("foo");
      *
      *  list.add(0);
-     *  System.out.println(list.get(0)); //we don't want to verify this
      *  list.clear();
+     *  System.out.println(list.get(0)); //we don't want to verify this
      *
      *  InOrder inOrder = inOrder(ignoreStubs(list));
      *  inOrder.verify(list).add(0);
